@@ -5,10 +5,10 @@ import torch.optim as optim
 from torch import autograd
 import numpy as np
 
-from gtad_lib import opts
-from gtad_lib.models import GTAD
-from gtad_lib.dataset import VideoDataSet
-from gtad_lib.loss_function import get_mask, subgraph_loss_func, node_loss_func, edge_loss_func
+from mdn_lib import opts
+from mdn_lib.mdn import MDN
+from mdn_lib.dataset import VideoDataSet
+from mdn_lib.loss_function import get_mask, subgraph_loss_func, node_loss_func, edge_loss_func
 
 
 ################## fix everything ##################
@@ -90,10 +90,10 @@ def test(data_loader, model, epoch, bm_mask):
 
     state = {'epoch': epoch + 1,
              'state_dict': model.state_dict()}
-    torch.save(state, opt["output"] + "/GTAD_checkpoint.pth.tar")
+    torch.save(state, opt["output"] + "/MDN_checkpoint.pth.tar")
     if total_am.avg() < best_loss:
         best_loss = total_am.avg()
-        torch.save(state, opt["output"] + "/GTAD_best.pth.tar")
+        torch.save(state, opt["output"] + "/MDN_best.pth.tar")
 
 if __name__ == '__main__':
     opt = opts.parse_opt()
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     if not os.path.exists(opt["output"]):
         os.makedirs(opt["output"])
 
-    model = GTAD(opt)
+    model = MDN(opt)
 
     model = torch.nn.DataParallel(model, device_ids=list(range(opt['n_gpu']))).cuda()
     print('use {} gpus to train!'.format(opt['n_gpu']))

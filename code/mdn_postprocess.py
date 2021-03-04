@@ -5,7 +5,7 @@ import json
 import os
 from joblib import Parallel, delayed
 
-from gtad_lib import opts
+from mdn_lib import opts
 
 thumos_class = {
     7 : 'BaseballPitch',

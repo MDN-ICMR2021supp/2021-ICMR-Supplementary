@@ -4,9 +4,9 @@ import numpy as np
 import pandas as pd
 import torch.nn.parallel
 
-from gtad_lib import opts
-from gtad_lib.models import GTAD
-from gtad_lib.dataset import VideoDataSet
+from mdn_lib import opts
+from mdn_lib.mdn import MDN
+from mdn_lib.dataset import VideoDataSet
 
 if __name__ == '__main__':
     opt = opts.parse_opt()
@@ -14,9 +14,9 @@ if __name__ == '__main__':
     if not os.path.exists(opt['output'] + "/results"):
         os.makedirs(opt['output'] + "/results")
 
-    model = GTAD(opt)
+    model = MDN(opt)
     model = torch.nn.DataParallel(model, device_ids=[0]).cuda()
-    checkpoint = torch.load(opt["output"] + "/GTAD_best.pth.tar")
+    checkpoint = torch.load(opt["output"] + "/MDN_best.pth.tar")
     model.load_state_dict(checkpoint['state_dict'])
     model.eval()
 
